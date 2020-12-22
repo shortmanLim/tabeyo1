@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.tabeyo.mapper.UserMapper">
+<!--  프로퍼티는 자바쪽, 컬럼은 디비쪽 -->
+	<resultMap type="com.tabeyo.domain.UserVO" id="userMap">
+		<id	property="userId" 		column="userid"/>
+		<result property="userId" 		column="userid"/>
+		<result property="userNm" 	column="userNm"/>
+		<result property="userPw" 		column="userPw"/>
+		<result property="nick" column="nick"/>
+		<result property="birthDate" column="birthDate"/>
+		<result property="sex" column="sex"/>
+		<result property="email" column="email"/>
+		<result property="phoneNo" column="phoneNo"/>
+		<result property="addr1" column="addr1"/>
+		<result property="addr2" column="addr2"/>
+		<result property="addr3" column="addr3"/>
+		<result property="regDate"		column="regDate"/>
+		<result property="grade" column="grade"/>
+		<result property="userPoint" column="userPoint"/>
+		<result property="enabled" column="enabled"/>
+		<result property="fvrFood" column="fvrFood"/>
+		<result property="fvrRes" column="fvrRes"/>
+		<result property="pfContent" column="pfContent"/>
+		<collection property="authList" resultMap="authMap">
+		</collection>
+	</resultMap>
+	<resultMap type="com.tabeyo.domain.AuthVO" id="authMap">
+		<result property="userId"	column="userId"/>
+		<result property="auth"		column="auth"/>
+	</resultMap>
+	
+	<!-- id찾기 -->
+	<select id="idFind">
+	
+	</select>
+	
+	<!-- pw찾기 -->
+	<select id="pwFind">
+	
+	</select>
+	
+	<!-- 회원가입 -->
+	<insert id="insert">
+		INSERT INTO tbl_users
+		VALUES(#{userId},#{userNm},#{userPw},#{nick},#{birthDate},
+			   #{sex},#{email},#{phoneNo},#{addr1},#{addr2},#{addr3},
+			   sysdate,'관리자',9999999999,true,#{fvrFood},'숙이네','ㄳ');
+		INSERT INTO tbl_user_auth (userId, auth) VALUES(#{userId}, 'ROLE_ADMIN')";
+	</insert>
+		
+	<!-- 회원정보수정 -->
+	<update id="update">
+	</update>
+	
+	<!-- 회원탈퇴 -->
+	<delete id="delete">
+	</delete>
+	
+	<!-- 전체회원관리 with paging -->
+	<select id="getUserListWithPaging"
+		resultType="com.tabeyo.domain.UserVO">
+  		<![CDATA[ 
+    	SELECT	userid,usernm,nick,birthdate,regdate,grade,userpoint
+    	FROM 	
+    		(
+    		SELECT /*+INDEX_DESC(tbl_users pk_users) */  
+                   rownum rn,userid,usernm,nick,birthdate,regdate,grade,userpoint
+                 FROM	tbl_users
+                 WHERE
+  		]]>
+
+		<include refid="criteria" />	 
+    
+  	<![CDATA[       
+  				rownum <= #{pageNum} * #{amount}
+  					)
+                WHERE	rn > (#{pageNum}-1) * #{amount}
+     ]]>
+	</select>
+	
+	<!-- 회원 포인트수정(관리자권한) -->
+	<update id="pointUpdate">
+	</update>
+	
+	<!-- 회원 강제탈퇴(관리자권한) -->
+	<delete id="forceDelete">
+	</delete>
+
+</mapper>
