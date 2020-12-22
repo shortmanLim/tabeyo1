@@ -7,11 +7,11 @@ import lombok.Data;
 
 @Data
 public class UserVO {
-		private String userId;
+	   private String userId;
 	   private String userNm;
 	   private String userPw;
 	   private String nick; 
-	   private Date birthDate;
+	   private String birthDate;
 	   private char sex;
 	   private String email;
 	   private String phoneNo;

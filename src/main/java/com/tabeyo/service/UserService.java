@@ -17,7 +17,7 @@ public interface UserService {
 	public void pwFind(String userId, // PW찾기
 			String email);
 
-	public void register(UserVO user); // 회원가입
+	public void register(UserVO userVO); // 회원가입
 
 	public void read(String userId); // 회원정보조회
 
@@ -32,5 +32,7 @@ public interface UserService {
 
 	public boolean forceRemove(String userId, // 회원 강제탈퇴(관리자권한)
 			 Model model);
+	
+	public int getTotalCount(Criteria cri); //회원수 얻기
 
 }

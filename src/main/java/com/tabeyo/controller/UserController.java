@@ -1,24 +1,26 @@
 package com.tabeyo.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.tabeyo.domain.Criteria;
+import com.tabeyo.domain.PageDTO;
 import com.tabeyo.domain.UserVO;
 import com.tabeyo.service.UserService;
 
-import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 
 @Controller
 @Log4j
 @RequestMapping("/user/*")
-@Getter
-@Setter
 public class UserController {
+	@Setter(onMethod_=@Autowired)
 	private UserService userService;
 	
 	//id찾기 화면 이동
@@ -69,16 +71,24 @@ public class UserController {
 	}
 	
 	//관리자 마이페이지
-	@PostMapping("/adminMyPage")
+	@GetMapping("/adminMyPage")
+	@Secured({"ROLE_ADMIN"})		
 	public void adminMyPage(Model model) {
 		
 	}
 	
 	//전체회원관리페이지
-	@PostMapping("/list")
-	public void list(Model model) {
+	@GetMapping("/list")//전체 목록 가져오기 
+	@Secured({"ROLE_ADMIN"})
+	public void list(Criteria cri, Model model) {
+		log.info("'UserController...list() with cri : " + cri);
 		
+		int total = userService.getTotalCount(cri);
+		model.addAttribute("list", userService.getList(cri));
+		model.addAttribute("pageMaker", new PageDTO(total, cri));
 	}
+	
+	
 	
 	//회원 강제탈퇴 (관리자권한)
 	@PostMapping("/forceRemove")
@@ -105,9 +115,9 @@ public class UserController {
 	
 	//회원가입 처리
 	@PostMapping("/register")		
-	public String register(UserVO user, Model model) {
-		log.info("register post : " + user.getUserId());
-		userService.register(user);
+	public String register(UserVO userVO) {
+		log.info("register post : " + userVO.getUserId()+","+userVO.getUserPw());
+		userService.register(userVO);
 		return "redirect:/";
 	}
 }

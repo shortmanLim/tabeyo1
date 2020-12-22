@@ -28,8 +28,8 @@ public class UserServiceImpl implements UserService {
 	@Setter(onMethod_ = @Autowired) 
 	private UserAttachMapper userAttachMapper;
 	
-	 @Setter(onMethod_ = @Autowired)
-	 private PasswordEncoder pwEncoder;
+	@Setter(onMethod_ = @Autowired)
+	private PasswordEncoder pwEncoder;
 	
 
 	// 회원첨부파일목록
@@ -54,16 +54,20 @@ public class UserServiceImpl implements UserService {
 	// 회원가입
 	@Transactional
 	@Override
-	public void register(UserVO user) {
-		user.setUserPw(pwEncoder.encode(user.getUserPw()));//인코딩 기능
-		userMapper.insert(user);
+	public void register(UserVO userVO) {
+		userVO.setUserPw(pwEncoder.encode(userVO.getUserPw()));//인코딩 기능
+		userMapper.insert(userVO);
+		if(userMapper.read(userVO.getUserId()).getUserId()!=null) {
+		userMapper.insertAuth(userVO.getUserId());	//회원가입 후, 회원가입한 계정에 권한부여(기본값 'ROLE_USER')
+		}
 	}
 
 	// 회원정보조회
 	@Override
 	public void read(String userId) {
 		log.info("userServiceImpl...get()");
-		return;
+		UserVO userVO = userMapper.read(userId);
+		userVO.getAuthList().forEach(authVO -> log.info(authVO));
 	}
 
 	// 회원정보수정
@@ -116,5 +120,13 @@ public class UserServiceImpl implements UserService {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	//회원수 얻기
+	@Override
+	public int getTotalCount(Criteria cri) {
+		log.info("BoardServiceImpl...getTotalCount()");
+		return userMapper.getTotalCount(cri);
+	}
+
 
 }

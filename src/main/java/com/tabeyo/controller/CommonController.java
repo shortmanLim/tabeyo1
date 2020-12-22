@@ -10,17 +10,17 @@ import lombok.extern.log4j.Log4j;
 @Controller
 @Log4j
 public class CommonController {
-//	@PostMapping("/customLogout")
-//	public void logoutPost() {
-//		log.info("custom Logout - POST");
-//	}
+	/*
+	 * @PostMapping("/customLogout") public void logoutPost() {
+	 * log.info("custom Logout - POST"); }
+	 */
 	
-	@GetMapping("/logout")
+	@GetMapping("/customLogout")
 	public void logoutGet() {
 		log.info("custom Logout - GET");
 	}
 	
-	@GetMapping("/login")
+	@GetMapping("/customLogin")
 	public void loginInput(String error, String logout, Model model) {
 		log.info("error : " + error);
 		log.info("logout : " + logout);
@@ -33,6 +33,7 @@ public class CommonController {
 			model.addAttribute("logout", "로그아웃 완료!");
 		}
 	}
+	
 	
 	@GetMapping("/accessError")
 	public void accessDenied(Authentication auth, Model model) {

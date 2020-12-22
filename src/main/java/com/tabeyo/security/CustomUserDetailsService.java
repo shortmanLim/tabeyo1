@@ -1,4 +1,4 @@
-package com.tabeyo.security;
+	package com.tabeyo.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,7 +14,7 @@ import lombok.extern.log4j.Log4j;
 
 @Log4j
 public class CustomUserDetailsService implements UserDetailsService{
-	@Setter(onMethod_ = @Autowired)
+	@Setter(onMethod_ = { @Autowired })
 	private UserMapper userMapper;  
 	
 	@Override
@@ -22,10 +22,10 @@ public class CustomUserDetailsService implements UserDetailsService{
 		log.warn("Load User By UserName : " + userName);
 		
 		//유저네임이 유저아이디
-		 UserVO vo = userMapper.read(userName);
+		 UserVO userVO = userMapper.read(userName);
 		 
-		 log.warn("queried by user mapper : " + vo);
-		return vo == null ? null : new CustomUser(vo);
+		 log.warn("queried by user mapper : " + userVO);
+		return userVO == null ? null : new CustomUser(userVO);
 	}//END loadUserByUsername()
 	
 }

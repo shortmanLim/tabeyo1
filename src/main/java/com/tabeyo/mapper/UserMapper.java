@@ -14,8 +14,11 @@ public interface UserMapper {
 	public UserVO pwFind(String email);
 	
 	// 회원가입
-	public void insert(UserVO user);
-
+	public void insert(UserVO userVO);
+	
+	// 회원가입계정 권한부여
+	public void insertAuth(String userId);
+	
 	// 소비자 마이페이지
 	public void myPage();
 
@@ -23,7 +26,7 @@ public interface UserMapper {
 	public void businMyPage();
 
 	// 회원정보조회
-	public UserVO read(String userid);
+	public UserVO read(String userId);
 
 	// 회원정보 수정
 	public int update(UserVO user);
@@ -43,6 +46,8 @@ public interface UserMapper {
 	// 회원 강제탈퇴 (관리자권한)
 	public int forceDelete(String userId);
 
+	//회원수 얻기
+	public int getTotalCount(Criteria cri);
 
 
 }

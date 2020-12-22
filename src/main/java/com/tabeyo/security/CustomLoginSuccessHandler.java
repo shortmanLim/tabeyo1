@@ -29,12 +29,15 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
 		
 		log.warn("ROLE NAME : " + roleNames);
 		
-		  if(roleNames.contains("ROLE_ADMIN")) {//ROLE이 ROLE_ADMIN이면
-		  response.sendRedirect("/"); return; }
-		  
-		  if(roleNames.contains("ROLE_USER")) {//ROLE이 ROLE_MEMBER이면
-		  response.sendRedirect("/"); return; }
-		 
+		if(roleNames.contains("ROLE_ADMIN")) {//ROLE이 ROLE_ADMIN이면
+			response.sendRedirect("/user/adminMyPage");
+			return;
+		}
+		
+		if(roleNames.contains("ROLE_USER")) {//ROLE이 ROLE_MEMBER이면
+			response.sendRedirect("/user/myPage");
+			return;
+		}
 		response.sendRedirect("/");
 		
 	}
